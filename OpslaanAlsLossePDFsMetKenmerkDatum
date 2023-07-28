@@ -1,0 +1,48 @@
+Sub OpslaanAlsLossePDFsMetKenmerkDatum()
+    ' Coded by Dean Tjodimedjo
+    Dim I As Long, J As Long
+    Dim xDlg As FileDialog
+    Dim xFolder As Variant
+    Dim xStart, xEnd As Integer
+    Dim xlApp As Object
+    Dim xlWorkbook As Object
+    Dim strFileName As String
+
+    ' 
+    Set xlApp = CreateObject("Excel.Application")
+    Set xlWorkbook = xlApp.Workbooks.Open("C:\Users\JohnDoe\ForYourEyesOnly.xlsx")
+
+    On Error GoTo lbl
+    Set xDlg = Application.FileDialog(msoFileDialogFolderPicker)
+    If xDlg.Show <> -1 Then Exit Sub
+    xFolder = xDlg.SelectedItems(1)
+    xStart = CInt(InputBox("Begin Pagina"))
+    xEnd = CInt(InputBox("Eind Pagina:"))
+    J = 2
+    If xStart <= xEnd Then
+        For I = xStart To xEnd Step 2
+            ' 
+            strFileName = xlWorkbook.Sheets(1).Range("A" & J).Value
+            J = J + 1
+            
+            ActiveDocument.ExportAsFixedFormat OutputFileName:= _
+                xFolder & "\" & strFileName & "-" & Format(Date, "dd-mm-yyyy") & ".pdf", ExportFormat:=wdExportFormatPDF, _
+                OpenAfterExport:=False, OptimizeFor:=wdExportOptimizeForPrint, Range:= _
+                wdExportFromTo, From:=I, To:=I + 1, Item:=wdExportDocumentContent, _
+                IncludeDocProps:=False, KeepIRM:=False, CreateBookmarks:= _
+                wdExportCreateHeadingBookmarks, DocStructureTags:=True, _
+                BitmapMissingFonts:=False, UseISO19005_1:=False
+        Next
+    End If
+    ' 
+    xlWorkbook.Close SaveChanges:=False
+    xlApp.Quit
+    Set xlWorkbook = Nothing
+    Set xlApp = Nothing
+
+    Exit Sub
+lbl:
+    MsgBox "Voer het juiste paginanummer in"
+End Sub
+
+
