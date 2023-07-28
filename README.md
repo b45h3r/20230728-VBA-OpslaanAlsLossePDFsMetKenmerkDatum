@@ -1,1 +1,1 @@
-# 20230728-VBA-OpslaanAlsLossePDFsMetKenmerkDatum
+This VBA code is a macro that saves individual sheets from an Excel workbook as separate PDF files. It prompts the user to select a folder to save the PDF files and asks for the starting and ending page numbers to export. The code then loops through the specified range of pages, retrieves the filename from the Excel sheet, and exports each page as a PDF file with the filename and the current date. Finally, it closes the Excel workbook and displays an error message if an incorrect page number is entered.
